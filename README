@@ -1,0 +1,7 @@
+This is an implementation of the board game Lost Cities with an AI which
+can learn through a genetic algorithm.  The basic game data structures and
+game logic are in src/.
+
+The AI and genetic algorith are TODO. :)
+
+
