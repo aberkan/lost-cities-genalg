@@ -11,6 +11,7 @@ cc_library(
 
 cc_test(
     name = "card_test",
+    size = "small",
     srcs = ["card_test.cc"],
     visibility = ["//visibility:public"],
     deps = ["card"],
@@ -26,6 +27,7 @@ cc_library(
 
 cc_test(
     name = "deck_test",
+    size = "small",
     srcs = ["deck_test.cc"],
     visibility = ["//visibility:public"],
     deps = ["deck"],
@@ -44,6 +46,7 @@ cc_library(
 
 cc_test(
     name = "hand_test",
+    size = "small",
     srcs = ["hand_test.cc"],
     visibility = ["//visibility:public"],
     deps = ["hand"],
@@ -61,6 +64,7 @@ cc_library(
 
 cc_test(
     name = "pile_test",
+    size = "small",
     srcs = ["pile_test.cc"],
     visibility = ["//visibility:public"],
     deps = ["pile"],
@@ -79,6 +83,7 @@ cc_library(
 
 cc_test(
     name = "tableau_test",
+    size = "small",
     srcs = ["tableau_test.cc"],
     visibility = ["//visibility:public"],
     deps = ["tableau"],
@@ -86,6 +91,7 @@ cc_test(
 
 cc_library(
     name = "player",
+    srcs = ["player.cc"],
     hdrs = ["player.h"],
     visibility = ["//visibility:public"],
     deps = [

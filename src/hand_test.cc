@@ -24,5 +24,11 @@ int main() {
   assert(c1 == c2);
   assert(h.size() == Hand::kHandSize - 1);
 
+  lostcities::Card c = h.At(2);
+
+  h.Remove(c);
+
+  assert(h.size() == Hand::kHandSize - 2);
+
   return 0;
 }

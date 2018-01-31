@@ -42,11 +42,12 @@ void PlayerConsole::PrintState(const Tableau *other_tab,
        << "\n";
 }
 
-void PlayerConsole::PlayCard(const Tableau *other_tab,
-                             DiscardPiles discard_piles) {
+PlayMove PlayerConsole::PlayCard(const Tableau *other_tab,
+                                 const DiscardPiles &discard_piles) {
   using std::cout;
 
-  hand().Sort();
+  Hand h = hand();
+  h.Sort();
 
   for (;;) {
     PrintState(other_tab, discard_piles);
@@ -68,15 +69,13 @@ void PlayerConsole::PlayCard(const Tableau *other_tab,
         cout << "Invalid index: " << input << "\n";
         continue;
       }
-      Card card = hand().At(input - '1');
+      Card card = h.At(input - '1');
       if (!tableau().IsPlayable(card)) {
         cout << "Card " << card.debug_string() << " cannot be played.\n";
         continue;
       }
       cout << "Played " << card.debug_string() << " to the tableau\n";
-      hand().RemoveAt(input - '1');
-      tableau().Play(card);
-      return;
+      return TableauMove(card);
     }
     // Discard a card
     cout << "Select a card to discard [1-8]\n";
@@ -92,29 +91,26 @@ void PlayerConsole::PlayCard(const Tableau *other_tab,
       cout << "Invalid pile index: " << input << "\n";
       continue;
     }
-    Card card = hand().RemoveAt(index);
-    discard_piles[input - '1'].Push(card);
-    cout << "Discarded " << card.debug_string() << " to pile " << input - '1'
+    Card card = h.At(index);
+    int discard_index = input - '1';
+    cout << "Discarded " << card.debug_string() << " to pile " << discard_index
          << "\n";
-    return;
+    return DiscardMove(card, discard_index);
   }
 }
 
-void PlayerConsole::DrawCard(Deck *deck, const Tableau *other_tab,
-                             DiscardPiles discard_piles) {
+DrawMove PlayerConsole::DrawCard(const Tableau *other_tab,
+                                 const DiscardPiles &discard_piles) {
   using std::cout;
 
   for (;;) {
-    cout << "Deck Size: " << deck->size() << "\n";
     cout << "Enter discard pile to draw from [1-5] or press enter to draw from "
             "the pile.\n";
     char input;
     input = ReadChar();
     if (input == '\n') {
-      Card card = deck->Pop();
-      hand().Add(card);
-      cout << "Drew " << card.debug_string() << " from the deck.\n";
-      return;
+      cout << "Drew from the deck.\n";
+      return DeckDraw();
     }
     if (input < '1' || input > '5') {
       cout << "Invalid pile " << input;
@@ -122,16 +118,18 @@ void PlayerConsole::DrawCard(Deck *deck, const Tableau *other_tab,
     }
     int index = input - '1';
     // Draw from discard
-    Pile &pile = discard_piles[index];
+    const Pile &pile = discard_piles[index];
     if (pile.size() == 0) {
       cout << "Pile " << index << " is empty.\n";
       continue;
     }
-    Card card = pile.Pop();
-    hand().Add(card);
-    cout << "Drew " << card.debug_string() << " from pile " << index << ".\n";
-    return;
+    cout << "Drew from pile " << index << ".\n";
+    return DiscardDraw(index);
   }
+}
+
+void PlayerConsole::LearnDrawnCard(Card c) {
+  std::cout << "Got Card: " << c.debug_string() << "\n";
 }
 
 } // end namespace

@@ -23,10 +23,13 @@ public:
   PlayerConsole(Deck *deck) : Player(deck) {}
   virtual ~PlayerConsole() {}
 
-  virtual void PlayCard(const Tableau *other_tab, DiscardPiles discard_piles);
+  virtual PlayMove PlayCard(const Tableau *other_tab,
+                            const DiscardPiles &discard_piles);
 
-  virtual void DrawCard(Deck *deck, const Tableau *other_tab,
-                        DiscardPiles discard_piles);
+  virtual DrawMove DrawCard(const Tableau *other_tab,
+                            const DiscardPiles &discard_piles);
+
+  virtual void LearnDrawnCard(Card c) override;
 
 private:
   // Print out the current state of the game.

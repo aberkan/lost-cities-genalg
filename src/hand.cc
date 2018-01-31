@@ -34,6 +34,11 @@ Card Hand::RemoveAt(int i) {
   return ret;
 }
 
+void Hand::Remove(Card c) {
+  auto it = std::remove(cards_.begin(), cards_.end(), c);
+  assert(it != cards_.end());
+  cards_.erase(it, cards_.end());
+}
 void Hand::Sort() { std::sort(cards_.begin(), cards_.end()); }
 
 std::string Hand::debug_string() const {

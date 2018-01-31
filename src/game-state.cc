@@ -12,17 +12,26 @@
 namespace lostcities {
 
 int GameState::RunGame() {
-  int current_player = 0;
+  int current_player_index = 0;
   while (deck_.size() > 0) {
-    int other_player = (current_player + 1) % 2;
-    std::cout << "=============== Player " << current_player + 1
+    Player *current_player = players_[current_player_index].get();
+    int other_player_index = (current_player_index + 1) % 2;
+    Player *other_player = players_[other_player_index].get();
+    std::cout << "=============== Player " << current_player_index + 1
               << "===============\n";
-    players_[current_player]->PlayCard(&players_[other_player]->tableau_view(),
-                                       discard_piles_);
-    players_[current_player]->DrawCard(
-        &deck_, &players_[other_player]->tableau_view(), discard_piles_);
+    PlayMove pmove =
+        current_player->PlayCard(&other_player->tableau_view(), discard_piles_);
+    current_player->DoPlayMove(pmove, discard_piles_);
+    DrawMove dmove =
+        current_player->DrawCard(&other_player->tableau_view(), discard_piles_);
+    if (dmove.type_ == DrawMove::DECK) {
+      current_player->AddCard(deck_.Pop());
+    } else {
+      current_player->AddCard(discard_piles_[dmove.pile_number_].Pop());
+    }
 
-    current_player = other_player;
+    current_player_index = other_player_index;
+    std::cout << "Deck Size: " << deck_.size() << "\n";
   }
   int score1 = players_[0]->Score();
   int score2 = players_[1]->Score();

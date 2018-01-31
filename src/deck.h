@@ -24,9 +24,9 @@ public:
 
   Card Pop();
 
-  int size() { return cards_.size(); }
+  int size() const { return cards_.size(); }
 
-  std::string debug_string();
+  std::string debug_string() const;
 
 private:
   std::vector<Card> cards_;

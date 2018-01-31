@@ -27,8 +27,13 @@ public:
   Card At(int rank) const;
   Card RemoveAt(int rank);
 
+  void Remove(Card c);
+
   void Add(Card c);
 
+  bool Contains(Card c) {
+    return std::find(cards_.begin(), cards_.end(), c) != cards_.end();
+  }
   std::string debug_string() const;
 
 private:

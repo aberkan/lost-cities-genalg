@@ -33,7 +33,7 @@ Card Deck::Pop() {
   return ret;
 }
 
-std::string Deck::debug_string() {
+std::string Deck::debug_string() const {
   std::string ret = "{";
   for (auto c : cards_) {
     ret.append(c.debug_string());
